@@ -1,0 +1,25 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Бронирование книги</h3>
+                </div>
+                <div class="card-body">
+                    <h5>{{ book.title }}</h5>
+                    <p><strong>Автор:</strong> {{ book.author }}</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Забронировать</button>
+                        <a href="{% url 'book-detail' book.pk %}" class="btn btn-secondary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

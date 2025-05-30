@@ -1,0 +1,35 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Просроченные книги</h2>
+    {% if loans %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Книга</th>
+                    <th>Читатель</th>
+                    <th>Дата выдачи</th>
+                    <th>Срок возврата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.book.title }}</td>
+                    <td>{{ loan.borrower.username }}</td>
+                    <td>{{ loan.loan_date|date:"d.m.Y" }}</td>
+                    <td>{{ loan.due_date|date:"d.m.Y" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Нет просроченных книг.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

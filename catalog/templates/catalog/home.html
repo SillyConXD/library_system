@@ -1,0 +1,43 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Library System</h1>
+    <p class="lead">Manage your library resources efficiently</p>
+    <hr class="my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Books</h5>
+                    <p class="card-text display-4">{{ num_books }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Available</h5>
+                    <p class="card-text display-4">{{ num_available }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">On Loan</h5>
+                    <p class="card-text display-4">{{ num_loans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg" href="{% url 'book-list' %}" role="button">Browse Books</a>
+        {% if not user.is_authenticated %}
+            <a class="btn btn-success btn-lg ml-2" href="{% url 'register' %}" role="button">Register</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

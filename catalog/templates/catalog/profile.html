@@ -1,0 +1,27 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Профиль пользователя</h2>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Имя пользователя:</strong> {{ user_obj.username }}</p>
+            <p><strong>Email:</strong> {{ user_obj.email }}</p>
+            <p><strong>Телефон:</strong> {{ user_obj.phone }}</p>
+            <p><strong>Адрес:</strong> {{ user_obj.address }}</p>
+            <p><strong>Дата регистрации:</strong> {{ user_obj.registration_date }}</p>
+            <p><strong>Роль:</strong>
+                {% if user_obj.is_admin %}
+                    Администратор
+                {% elif user_obj.is_librarian %}
+                    Библиотекарь
+                {% elif user_obj.is_reader %}
+                    Читатель
+                {% else %}
+                    Не указана
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

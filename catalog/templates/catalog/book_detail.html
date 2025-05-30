@@ -1,0 +1,107 @@
+{% extends "catalog/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            {% if book.cover %}
+                <img src="{{ book.cover.url }}" class="img-fluid mb-3" alt="{{ book.title }}">
+            {% else %}
+                <div class="no-cover bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                    <span class="text-muted">No cover available</span>
+                </div>
+            {% endif %}
+            
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Availability</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Status:</strong> {{ book.get_status_display }}<br>
+                        <strong>Available:</strong> {{ book.available }} of {{ book.quantity }}<br>
+                    </p>
+                    
+                    {% if user.is_authenticated %}
+                        {% if can_reserve %}
+                            <a href="{% url 'reserve-book' book.pk %}" class="btn btn-primary btn-block">Reserve</a>
+                        {% endif %}
+                        {% if user.is_librarian or user.is_admin %}
+                            <a href="{% url 'loan-book' book.pk %}" class="btn btn-success btn-block mt-2">Loan</a>
+                            <a href="{% url 'admin:catalog_book_change' book.pk %}" class="btn btn-secondary btn-block mt-2">Edit</a>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted">Please login to reserve this book</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>{{ book.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                    <p class="card-text"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                    <p class="card-text"><strong>Publisher:</strong> {{ book.publisher }}</p>
+                    <p class="card-text"><strong>Published:</strong> {{ book.publish_date }}</p>
+                    <p class="card-text"><strong>Pages:</strong> {{ book.pages }}</p>
+                    <p class="card-text"><strong>Genres:</strong> 
+                        {% for genre in book.genre.all %}
+                            <span class="badge badge-primary">{{ genre }}</span>
+                        {% endfor %}
+                    </p>
+                    <hr>
+                    <h5>Summary</h5>
+                    <p class="card-text">{{ book.summary }}</p>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Loan History</h5>
+                </div>
+                <div class="card-body">
+                    {% if book.loans.all %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Borrower</th>
+                                        <th>Loan Date</th>
+                                        <th>Due Date</th>
+                                        <th>Returned</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for loan in book.loans.all %}
+                                        <tr>
+                                            <td>{{ loan.borrower }}</td>
+                                            <td>{{ loan.loan_date }}</td>
+                                            <td>{{ loan.due_date }}</td>
+                                            <td>
+                                                {% if loan.returned_date %}
+                                                    {{ loan.returned_date }}
+                                                {% else %}
+                                                    <span class="badge badge-warning">On loan</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No loan history for this book</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

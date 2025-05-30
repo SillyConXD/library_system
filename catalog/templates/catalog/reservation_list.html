@@ -1,0 +1,51 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Все бронирования</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Книга</th>
+                    <th>Пользователь</th>
+                    <th>Дата бронирования</th>
+                    <th>Срок действия</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.book.title }}</td>
+                    <td>{{ reservation.user.username }}</td>
+                    <td>{{ reservation.reservation_date|date:"d.m.Y H:i" }}</td>
+                    <td>{{ reservation.expiry_date|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        {% if reservation.fulfilled %}
+                            <span class="badge bg-success">Выполнено</span>
+                        {% elif reservation.expiry_date < now %}
+                            <span class="badge bg-danger">Просрочено</span>
+                        {% else %}
+                            <span class="badge bg-warning">Активно</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not reservation.fulfilled and reservation.expiry_date > now %}
+                        <a href="{% url 'fulfill-reservation' reservation.id %}" class="btn btn-sm btn-success">Выдать</a>
+                        <a href="{% url 'cancel-reservation' reservation.id %}" class="btn btn-sm btn-danger">Отменить</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">Нет активных бронирований</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

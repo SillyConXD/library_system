@@ -1,0 +1,50 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Мои бронирования</h2>
+    
+    {% if reservations %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Книга</th>
+                    <th>Дата бронирования</th>
+                    <th>Срок действия</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.book.title }}</td>
+                    <td>{{ reservation.reservation_date|date:"d.m.Y H:i" }}</td>
+                    <td>{{ reservation.expiry_date|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        {% if reservation.fulfilled %}
+                            <span class="badge bg-success">Выдана</span>
+                        {% elif reservation.expiry_date < now %}
+                            <span class="badge bg-danger">Просрочена</span>
+                        {% else %}
+                            <span class="badge bg-warning">Ожидает</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not reservation.fulfilled and reservation.expiry_date > now %}
+                        <a href="{% url 'cancel-reservation' reservation.id %}" class="btn btn-sm btn-danger">Отменить</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        У вас нет активных бронирований.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
