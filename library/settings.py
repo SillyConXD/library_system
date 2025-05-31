@@ -43,8 +43,6 @@ INSTALLED_APPS = [
     'django_tables2',
     'django_filters',
     'crispy_bootstrap4',
-    'rest_framework',
-    'drf_yasg',
 
 ]
 
@@ -143,11 +141,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'catalog.User'
 LOGOUT_REDIRECT_URL = 'home'  # Перенаправление после выхода
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-}

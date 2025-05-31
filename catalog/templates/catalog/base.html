@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library System - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'catalog/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'catalog/style.css' %}">
 </head>
 <body>
     <header>
@@ -84,12 +84,11 @@
                 </div>
             {% endfor %}
         {% endif %}
-        
         {% block content %}{% endblock %}
     </main>
 
     <footer class="footer bg-dark text-white py-3">
-        <div class="container">
+        <div class="container text-center">
             <span class="text-muted">Library System &copy; {% now "Y" %}</span>
         </div>
     </footer>
